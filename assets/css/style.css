@@ -554,7 +554,7 @@ img { max-width: 100%; display: block; }
   color: var(--muted);
 }
 
-/* 붙여넣은 콘텐츠(문서/웹페이지 등)의 흰색 배경을 무시하고, 링크는 그대로 유지 */
+/* 자유 작성 영역에 붙여넣은 콘텐츠의 흰색 배경을 무시하고, 링크는 그대로 유지 */
 .free-notes,
 .free-notes * {
   background-color: transparent !important;
@@ -564,6 +564,13 @@ img { max-width: 100%; display: block; }
 .free-notes a {
   color: var(--gold);
   text-decoration: underline;
+}
+
+/* 본문 영역에 붙여넣은 링크/텍스트의 흰색 배경 제거 (카드 등 자체 컴포넌트 배경은 영향 없음) */
+.editable-region a[style*="background"],
+.editable-region span[style*="background"] {
+  background-color: transparent !important;
+  background-image: none !important;
 }
 
 /* Footer */
