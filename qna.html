@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>질의응답 · LG SW PM Competition 2026</title>
+<link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a class="brand" href="index.html">
+      <span class="badge">★</span>
+      <span class="title-main">LG SW PM Competition</span>
+      <span class="title-year">2026</span>
+    </a>
+    <button class="nav-toggle" aria-label="메뉴 열기">☰</button>
+    <nav>
+      <ul class="nav-menu">
+        <li><a href="index.html">홈 · 세계관</a></li>
+        <li><a href="schedule.html">대회 일정</a></li>
+        <li><a href="prelim.html">예선 안내</a></li>
+        <li><a href="final.html">본선 안내</a></li>
+        <li><a href="qna.html">질의응답</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="section">
+  <div class="container">
+    <main id="pageContent">
+    <div class="section-head">
+      <h2>질의응답</h2>
+      <p>대회 관련 궁금한 점을 남겨주시면 담당자 이메일(DL-lgswpmc-2026@lge.com)로 즉시 전달됩니다.</p>
+    </div>
+    </main>
+
+    <form class="qna-form" id="qnaForm">
+      <div class="form-row">
+        <div class="form-field">
+          <label for="qName">이름</label>
+          <input type="text" id="qName" placeholder="홍길동" required />
+        </div>
+        <div class="form-field">
+          <label for="qEmail">회신 받을 이메일</label>
+          <input type="email" id="qEmail" placeholder="you@lge.com" required />
+        </div>
+        <div class="form-field full">
+          <label for="qTitle">제목</label>
+          <input type="text" id="qTitle" placeholder="문의 제목을 입력해 주세요" required />
+        </div>
+        <div class="form-field full">
+          <label for="qMessage">내용</label>
+          <textarea id="qMessage" placeholder="문의 내용을 자세히 입력해 주세요" required></textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">질문 등록</button>
+        <span class="form-status" id="formStatus"></span>
+      </div>
+    </form>
+
+    <div class="section-head" style="text-align:left; margin-bottom: 16px;">
+      <h2 style="font-size: 20px;">등록된 질문 (이 브라우저 기준)</h2>
+    </div>
+    <div class="qna-list" id="qnaList"></div>
+    <div class="empty-state" id="qnaEmpty">아직 등록된 질문이 없습니다. 첫 질문을 남겨보세요!</div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    © 2026 LG SW PM Competition · Business, Process, People : Elevate Excellence<br />
+    문의: DL-lgswpmc-2026@lge.com
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/qna.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/editor.js"></script>
+</body>
+</html>
