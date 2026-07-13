@@ -1,28 +1,38 @@
 // 웹 페이지 In-place 편집 모드
 // - 화면 우측 하단 "편집" 버튼으로 토글합니다.
-// - 편집 모드에서는 본문 텍스트를 클릭해서 직접 수정할 수 있습니다.
+// - 편집 모드에서는 본문 텍스트를 클릭해서 직접 수정하거나, 페이지 하단의
+//   "자유 작성 영역"에 새 내용을 자유롭게 추가할 수 있습니다. (글자 색상/크기 지정 가능)
 // - "임시저장"은 이 브라우저(localStorage)에만 저장되어, 새로고침해도 유지됩니다.
 // - "HTML 다운로드"로 수정된 페이지 파일을 받아 실제 파일을 교체 → git commit/push 하면
 //   모든 방문자에게 반영되는 정식 배포가 됩니다. (GitHub Pages는 서버가 없어 실시간 전체 공유 저장은 지원하지 않습니다.)
 (function () {
   const EDIT_PASSCODE = "pmpb2026"; // 간단한 오남용 방지용 암호 (진짜 보안 인증 아님)
-  const STORAGE_PREFIX = "pmpb_edit_v1_";
+  const STORAGE_PREFIX = "pmpb_edit_v2_";
   const storageKey = STORAGE_PREFIX + location.pathname.replace(/[^a-zA-Z0-9]/g, "_");
 
   let editMode = false;
   let toolbar, statusEl;
 
-  function getContentRoot() {
-    return document.getElementById("pageContent");
+  function getContentRoots() {
+    return Array.from(document.querySelectorAll(".editable-region"));
   }
 
   function restoreSavedContent() {
-    const root = getContentRoot();
-    if (!root) return;
+    const roots = getContentRoots();
+    if (!roots.length) return;
     const saved = localStorage.getItem(storageKey);
-    if (saved) {
-      root.innerHTML = saved;
+    if (!saved) return;
+    let map;
+    try {
+      map = JSON.parse(saved);
+    } catch (e) {
+      return;
     }
+    roots.forEach((root) => {
+      if (root.id && Object.prototype.hasOwnProperty.call(map, root.id)) {
+        root.innerHTML = map[root.id];
+      }
+    });
   }
 
   function setStatus(msg) {
@@ -33,6 +43,35 @@
     if (editMode) {
       e.preventDefault();
     }
+  }
+
+  function wrapSelectionWithStyle(styleProp, value) {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0 || sel.isCollapsed) {
+      setStatus("먼저 스타일을 적용할 텍스트를 드래그해서 선택해 주세요.");
+      return;
+    }
+    const range = sel.getRangeAt(0);
+    const roots = getContentRoots();
+    const inRoot = roots.some((root) => root.contains(range.commonAncestorContainer));
+    if (!inRoot) {
+      setStatus("편집 가능한 영역 안에서 텍스트를 선택해 주세요.");
+      return;
+    }
+    const span = document.createElement("span");
+    span.style[styleProp] = value;
+    try {
+      range.surroundContents(span);
+    } catch (e) {
+      const frag = range.extractContents();
+      span.appendChild(frag);
+      range.insertNode(span);
+    }
+    sel.removeAllRanges();
+    const newRange = document.createRange();
+    newRange.selectNodeContents(span);
+    sel.addRange(newRange);
+    setStatus("선택한 텍스트에 스타일을 적용했습니다.");
   }
 
   // 네이티브 prompt/alert/confirm 대신 사용하는 커스텀 모달
@@ -102,8 +141,8 @@
   }
 
   async function toggleEditMode() {
-    const root = getContentRoot();
-    if (!root) return;
+    const roots = getContentRoots();
+    if (!roots.length) return;
 
     if (!editMode) {
       const input = await showModal({
@@ -119,18 +158,22 @@
         return;
       }
       editMode = true;
-      root.setAttribute("contenteditable", "true");
-      root.classList.add("edit-active");
-      document.querySelectorAll("#pageContent a").forEach((a) => {
+      roots.forEach((root) => {
+        root.setAttribute("contenteditable", "true");
+        root.classList.add("edit-active");
+      });
+      document.querySelectorAll(".editable-region a").forEach((a) => {
         a.addEventListener("click", blockLinkNav);
       });
       renderToolbarButtons(true);
-      setStatus("편집 모드입니다. 텍스트를 클릭해서 수정하세요.");
+      setStatus("편집 모드입니다. 기존 텍스트를 수정하거나, 페이지 하단 자유 작성 영역에 새 내용을 추가하세요.");
     } else {
       editMode = false;
-      root.setAttribute("contenteditable", "false");
-      root.classList.remove("edit-active");
-      document.querySelectorAll("#pageContent a").forEach((a) => {
+      roots.forEach((root) => {
+        root.setAttribute("contenteditable", "false");
+        root.classList.remove("edit-active");
+      });
+      document.querySelectorAll(".editable-region a").forEach((a) => {
         a.removeEventListener("click", blockLinkNav);
       });
       renderToolbarButtons(false);
@@ -139,9 +182,13 @@
   }
 
   function saveLocal() {
-    const root = getContentRoot();
-    if (!root) return;
-    localStorage.setItem(storageKey, root.innerHTML);
+    const roots = getContentRoots();
+    if (!roots.length) return;
+    const map = {};
+    roots.forEach((root) => {
+      if (root.id) map[root.id] = root.innerHTML;
+    });
+    localStorage.setItem(storageKey, JSON.stringify(map));
     setStatus("이 브라우저에 임시저장되었습니다. (다른 방문자에게는 보이지 않음)");
   }
 
@@ -159,11 +206,10 @@
 
   function downloadHtml() {
     const clone = document.documentElement.cloneNode(true);
-    const cloneRoot = clone.querySelector("#pageContent");
-    if (cloneRoot) {
-      cloneRoot.removeAttribute("contenteditable");
-      cloneRoot.classList.remove("edit-active");
-    }
+    clone.querySelectorAll(".editable-region").forEach((root) => {
+      root.removeAttribute("contenteditable");
+      root.classList.remove("edit-active");
+    });
     const toolbarClone = clone.querySelector("#editorToolbar");
     if (toolbarClone) toolbarClone.remove();
 
@@ -197,6 +243,35 @@
       saveBtn.onclick = saveLocal;
       toolbar.appendChild(saveBtn);
 
+      const colorLabel = document.createElement("label");
+      colorLabel.className = "editor-color-label";
+      colorLabel.appendChild(document.createTextNode("색상 "));
+      const colorInput = document.createElement("input");
+      colorInput.type = "color";
+      colorInput.value = "#f2b705";
+      colorInput.title = "선택한 텍스트의 색상을 바꿉니다.";
+      colorInput.addEventListener("input", () => wrapSelectionWithStyle("color", colorInput.value));
+      colorLabel.appendChild(colorInput);
+      toolbar.appendChild(colorLabel);
+
+      const sizeSelect = document.createElement("select");
+      sizeSelect.className = "editor-size-select";
+      sizeSelect.title = "선택한 텍스트의 글자 크기를 바꿉니다.";
+      sizeSelect.innerHTML =
+        '<option value="">크기 선택</option>' +
+        '<option value="14px">14px</option>' +
+        '<option value="16px">16px</option>' +
+        '<option value="18px">18px</option>' +
+        '<option value="20px">20px</option>' +
+        '<option value="24px">24px</option>' +
+        '<option value="28px">28px</option>' +
+        '<option value="32px">32px</option>';
+      sizeSelect.addEventListener("change", () => {
+        if (sizeSelect.value) wrapSelectionWithStyle("fontSize", sizeSelect.value);
+        sizeSelect.value = "";
+      });
+      toolbar.appendChild(sizeSelect);
+
       const downloadBtn = document.createElement("button");
       downloadBtn.className = "editor-btn";
       downloadBtn.textContent = "⬇️ HTML 다운로드";
@@ -226,7 +301,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    if (!getContentRoot()) return;
+    if (!getContentRoots().length) return;
     restoreSavedContent();
     buildToolbar();
   });
