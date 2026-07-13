@@ -55,16 +55,12 @@ function setStatus(message, type) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  if (typeof emailjs !== "undefined" && EMAILJS_CONFIG.publicKey) {
-    emailjs.init({ publicKey: EMAILJS_CONFIG.publicKey });
-  }
-
   renderQnaList();
 
   const form = document.getElementById("qnaForm");
   if (!form) return;
 
-  form.addEventListener("submit", async (e) => {
+  form.addEventListener("submit", (e) => {
     e.preventDefault();
 
     const name = document.getElementById("qName").value.trim();
@@ -77,46 +73,29 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const submitBtn = form.querySelector('button[type="submit"]');
-    submitBtn.disabled = true;
-    setStatus("전송 중입니다...", "");
-
     const now = new Date();
     const dateStr = now.toLocaleString("ko-KR");
 
-    const templateParams = {
-      to_email: EMAILJS_CONFIG.toEmail,
-      from_name: name,
-      from_email: email,
-      title: title,
-      message: message,
-      submitted_at: dateStr,
-    };
+    const mailSubject = `[LG SW PM Competition 2026 질의응답] ${title}`;
+    const mailBody =
+      `이름: ${name}\n` +
+      `회신 이메일: ${email}\n` +
+      `등록 일시: ${dateStr}\n\n` +
+      `${message}`;
 
-    try {
-      if (
-        typeof emailjs === "undefined" ||
-        EMAILJS_CONFIG.serviceId.startsWith("YOUR_") ||
-        EMAILJS_CONFIG.templateId.startsWith("YOUR_") ||
-        EMAILJS_CONFIG.publicKey.startsWith("YOUR_")
-      ) {
-        throw new Error("EmailJS가 아직 설정되지 않았습니다. assets/js/config.js를 확인하세요.");
-      }
+    const mailtoUrl =
+      `mailto:${encodeURIComponent(QNA_TO_EMAIL)}` +
+      `?subject=${encodeURIComponent(mailSubject)}` +
+      `&body=${encodeURIComponent(mailBody)}`;
 
-      await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, templateParams);
+    window.location.href = mailtoUrl;
 
-      const list = loadQnaList();
-      list.push({ name, email, title, message, date: dateStr });
-      saveQnaList(list);
-      renderQnaList();
+    const list = loadQnaList();
+    list.push({ name, email, title, message, date: dateStr });
+    saveQnaList(list);
+    renderQnaList();
 
-      form.reset();
-      setStatus("질문이 등록되고 담당자에게 이메일이 발송되었습니다.", "success");
-    } catch (err) {
-      console.error(err);
-      setStatus("전송에 실패했습니다: " + err.message, "error");
-    } finally {
-      submitBtn.disabled = false;
-    }
+    form.reset();
+    setStatus("메일 작성 화면이 열렸습니다. 내용을 확인하고 '보내기'를 눌러 등록을 완료해 주세요.", "success");
   });
 });
