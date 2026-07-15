@@ -30,6 +30,29 @@ img { max-width: 100%; display: block; }
   margin: 0 auto;
 }
 
+/* Page background silhouette (일정/예선/본선/질의응답 페이지) */
+body.has-bg-silhouette {
+  position: relative;
+}
+
+body.has-bg-silhouette::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-image: url("../img/pmpb_silhouette.png");
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  background-size: min(560px, 55vw);
+  opacity: 0.08;
+  pointer-events: none;
+}
+
+body.has-bg-silhouette > * {
+  position: relative;
+  z-index: 1;
+}
+
 /* Header / Nav */
 .site-header {
   position: sticky;
