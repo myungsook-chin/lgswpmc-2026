@@ -397,6 +397,42 @@ body.has-bg-silhouette > * {
 
 .card.lore-card p { font-size: 14.5px; line-height: 1.75; }
 
+/* Worldview story reveal-in-sequence animation (plays on each page load) */
+@keyframes loreReveal {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.reveal-line {
+  opacity: 0;
+  animation: loreReveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.reveal-line.reveal-0 { animation-delay: 0s; }
+.reveal-line.reveal-1 { animation-delay: 0.3s; }
+.reveal-line.reveal-2 { animation-delay: 1.4s; }
+.reveal-line.reveal-3 { animation-delay: 2.5s; }
+.reveal-line.reveal-4 { animation-delay: 3.7s; }
+.reveal-line.reveal-5 { animation-delay: 4.8s; }
+.reveal-line.reveal-6 { animation-delay: 5.7s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-line {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
 /* Character strip */
 .character-strip {
   display: grid;
