@@ -43,8 +43,8 @@ body.has-bg-silhouette::before {
   background-image: url("../img/pmpb_silhouette.png");
   background-repeat: no-repeat;
   background-position: bottom right;
-  background-size: min(560px, 55vw);
-  opacity: 0.08;
+  background-size: min(900px, 80vw);
+  opacity: 0.4;
   pointer-events: none;
 }
 
