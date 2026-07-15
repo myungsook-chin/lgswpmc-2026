@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Q&amp;A · LG SW PM Competition 2026</title>
+<link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body class="has-bg-silhouette">
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a class="brand" href="index.html">
+      <span class="badge">★</span>
+      <span class="title-main">LG SW PM Competition</span>
+      <span class="title-year">2026</span>
+    </a>
+    <button class="nav-toggle" aria-label="Open menu">☰</button>
+    <nav>
+      <ul class="nav-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="worldview.html">Worldview</a></li>
+        <li><a href="schedule.html">Schedule</a></li>
+        <li><a href="prelim.html">Preliminary</a></li>
+        <li><a href="final.html">Final</a></li>
+        <li><a href="qna.html" class="active">Q&amp;A</a></li>
+        <li class="lang-item"><a href="../qna.html">🌐 KO</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="section">
+  <div class="container">
+    <main id="pageContent" class="editable-region">
+    <div class="section-head">
+      <h2>Q&amp;A</h2>
+      <p>If you leave any questions about the competition, they will be immediately forwarded to the organizer's email (DL-lgswpmc-2026@lge.com).</p>
+    </div>
+    </main>
+
+    <form class="qna-form" id="qnaForm">
+      <div class="form-row">
+        <div class="form-field">
+          <label for="qName">Name</label>
+          <input type="text" id="qName" placeholder="John Doe" required />
+        </div>
+        <div class="form-field">
+          <label for="qEmail">Reply Email</label>
+          <input type="email" id="qEmail" placeholder="you@lge.com" required />
+        </div>
+        <div class="form-field full">
+          <label for="qTitle">Title</label>
+          <input type="text" id="qTitle" placeholder="Enter the title of your inquiry" required />
+        </div>
+        <div class="form-field full">
+          <label for="qMessage">Message</label>
+          <textarea id="qMessage" placeholder="Please describe your inquiry in detail" required></textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Submit Question</button>
+        <span class="form-status" id="formStatus"></span>
+      </div>
+    </form>
+
+    <div class="section-head" style="text-align:left; margin-bottom: 16px;">
+      <h2 style="font-size: 20px;">Submitted Questions (this browser only)</h2>
+    </div>
+    <div class="qna-list" id="qnaList"></div>
+    <div class="empty-state" id="qnaEmpty">No questions yet. Be the first to ask!</div>
+  </div>
+</section>
+
+<div id="freeNotes" class="editable-region free-notes" data-placeholder="Click here to freely add content. (Only editable in edit mode)"></div>
+
+<footer class="site-footer">
+  <div class="container">
+    © 2026 LG SW PM Competition · Business, Process, People : Elevate Excellence<br />
+    Contact: DL-lgswpmc-2026@lge.com
+  </div>
+</footer>
+
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/qna.js"></script>
+<script src="../assets/js/main.js"></script>
+<script src="../assets/js/editor.js"></script>
+</body>
+</html>

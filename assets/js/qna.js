@@ -60,6 +60,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("qnaForm");
   if (!form) return;
 
+  const isEN = document.documentElement.lang === "en";
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -69,19 +71,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const message = document.getElementById("qMessage").value.trim();
 
     if (!name || !email || !title || !message) {
-      setStatus("모든 항목을 입력해 주세요.", "error");
+      setStatus(isEN ? "Please fill in all fields." : "모든 항목을 입력해 주세요.", "error");
       return;
     }
 
     const now = new Date();
-    const dateStr = now.toLocaleString("ko-KR");
+    const dateStr = now.toLocaleString(isEN ? "en-US" : "ko-KR");
 
-    const mailSubject = `[LG SW PM Competition 2026 질의응답] ${title}`;
-    const mailBody =
-      `이름: ${name}\n` +
-      `회신 이메일: ${email}\n` +
-      `등록 일시: ${dateStr}\n\n` +
-      `${message}`;
+    const mailSubject = isEN
+      ? `[LG SW PM Competition 2026 Q&A] ${title}`
+      : `[LG SW PM Competition 2026 질의응답] ${title}`;
+    const mailBody = isEN
+      ? `Name: ${name}\n` +
+        `Reply Email: ${email}\n` +
+        `Submitted: ${dateStr}\n\n` +
+        `${message}`
+      : `이름: ${name}\n` +
+        `회신 이메일: ${email}\n` +
+        `등록 일시: ${dateStr}\n\n` +
+        `${message}`;
 
     const mailtoUrl =
       `mailto:${encodeURIComponent(QNA_TO_EMAIL)}` +
@@ -96,6 +104,11 @@ document.addEventListener("DOMContentLoaded", () => {
     renderQnaList();
 
     form.reset();
-    setStatus("메일 작성 화면이 열렸습니다. 내용을 확인하고 '보내기'를 눌러 등록을 완료해 주세요.", "success");
+    setStatus(
+      isEN
+        ? "Your email draft has been opened. Please review it and click 'Send' to complete your submission."
+        : "메일 작성 화면이 열렸습니다. 내용을 확인하고 '보내기'를 눌러 등록을 완료해 주세요.",
+      "success"
+    );
   });
 });
