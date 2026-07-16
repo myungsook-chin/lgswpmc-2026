@@ -402,34 +402,42 @@ body.has-bg-silhouette > * {
   from {
     opacity: 0;
     transform: translateY(16px);
-    filter: blur(3px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
-    filter: blur(0);
   }
 }
 
+/* JS가 애니메이션을 지원 감지 후 hide 클래스를 추가할 때만 숨김.
+   지원 안 되는 환경(VDI·IE 호환 모드)에서는 항상 보임. */
 .reveal-line {
+  opacity: 1;
+}
+
+.js-reveal-ready .reveal-line {
   opacity: 0;
   animation: loreReveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-.reveal-line.reveal-0 { animation-delay: 0s; }
-.reveal-line.reveal-1 { animation-delay: 0.3s; }
-.reveal-line.reveal-2 { animation-delay: 1.4s; }
-.reveal-line.reveal-3 { animation-delay: 2.5s; }
-.reveal-line.reveal-4 { animation-delay: 3.7s; }
-.reveal-line.reveal-5 { animation-delay: 4.8s; }
-.reveal-line.reveal-6 { animation-delay: 5.7s; }
+.js-reveal-ready .reveal-line.reveal-0 { animation-delay: 0s; }
+.js-reveal-ready .reveal-line.reveal-1 { animation-delay: 0.3s; }
+.js-reveal-ready .reveal-line.reveal-2 { animation-delay: 1.4s; }
+.js-reveal-ready .reveal-line.reveal-3 { animation-delay: 2.5s; }
+.js-reveal-ready .reveal-line.reveal-4 { animation-delay: 3.7s; }
+.js-reveal-ready .reveal-line.reveal-5 { animation-delay: 4.8s; }
+.js-reveal-ready .reveal-line.reveal-6 { animation-delay: 5.7s; }
+
+/* 모션 감소 설정 환경: transform 없이 opacity 페이드만 유지 (순차 등장 효과는 살림) */
+@keyframes loreRevealFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal-line {
-    animation: none;
-    opacity: 1;
+  .js-reveal-ready .reveal-line {
+    animation: loreRevealFade 0.8s ease forwards;
     transform: none;
-    filter: none;
   }
 }
 
