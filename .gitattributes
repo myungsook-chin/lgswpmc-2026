@@ -1,0 +1,2 @@
+2단계_본선/**/*.mp3 filter=lfs diff=lfs merge=lfs -text
+2단계_본선/**/*.mp4 filter=lfs diff=lfs merge=lfs -text

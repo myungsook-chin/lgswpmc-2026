@@ -1,0 +1,15 @@
+﻿risk_id,리스크,관련도메인,최초등록일,최종갱신일,당초등급,현재등급,강등근거,대응계획,owner,상태
+RSK-01,Helion Robotics 단일 공급사 의존 (자율주행 스택 전량),Risk/Resources,2026-01-19,2026-04-11,High,Medium,(공란),정기 미팅으로 관리,남기웅,Open
+RSK-02,AI 인프라(시뮬레이션·추론) 비용 초과,Financial,2026-01-19,2026-04-11,High,Medium,(공란),월 사용량 모니터링,임태오,Open
+RSK-03,3개 지역 비동기 협업으로 인한 의사결정 지연,Stakeholders,2026-01-19,2026-04-11,High,Medium,(공란),주간 싱크콜,한도경,Open
+RSK-04,EU 기계류규정·AI Act 대응 지연,Governance,2026-02-02,2026-04-11,Medium,Medium,-,법무 검토 요청,윤채원,Open
+RSK-05,주행 정책 회귀(성능 저하),Risk,2026-02-16,2026-04-11,Medium,Low,(공란),회귀 시뮬레이션 격주 실행,임태오,Open
+RSK-06,로봇 기종별 펌웨어 파편화,Scope,2026-03-02,2026-04-11,Medium,Medium,-,버전별 매핑 테이블,배가온,Open
+RSK-07,QA 인력 부족,Resources,2026-01-19,2026-03-20,Medium,Closed,-,2명 충원 완료,문세아,Closed
+RSK-08,안전 인증(ISO 13482) 심사 지연,Schedule,2026-03-16,2026-04-11,Low,Low,-,사전 심사 신청,윤채원,Open
+RSK-09,현장 운영자 수용성 저조,Stakeholders,2026-01-19,2026-02-13,Medium,Closed,(공란),-,노유진,Closed
+RSK-10,GPU 시뮬레이션 자원 부족,Resources,2026-02-02,2026-04-11,Medium,Low,-,예약 인스턴스 확보,정하람,Open
+RSK-11,액추에이터 SDK 호환성,Risk,2026-03-30,2026-04-11,Low,Low,-,-,남기웅,Open
+RSK-12,지역별 지도·안전 규정 편차,Scope,2026-04-06,2026-04-11,Medium,Medium,-,지역별 검수,D.Suh,Open
+RSK-13,주행 영상 저장 비용 증가,Financial,2026-04-06,2026-04-11,Low,Low,-,보존정책 조정,오시윤,Open
+RSK-14,인도 리전 관제 레이턴시,Risk,2026-04-06,2026-04-11,Low,Low,-,-,A.Rao,Open
